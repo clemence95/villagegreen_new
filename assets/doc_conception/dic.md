@@ -240,7 +240,7 @@ Inclure un diagramme UML ou Merise pour représenter les relations entre les ent
 - **Produits** : Lié à **Fournisseurs** via `id_fournisseur`.
 - **Produits** : Lié à **Catégorie/Sous-catégorie** via `id_categorie` et `id_sous_categorie`.
 
-![Entites_relations](Entites_relations.png)
+![Entites_relations](/assets/img/Entites_relations.png)
 
 ### 6. Gestion des erreurs
 Dans les exemples PHP, ajouter des logs ou des messages d'erreur détaillés pour faciliter le débogage. Exemple :
