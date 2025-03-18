@@ -234,11 +234,86 @@ public function testCalculPrixVenteTTC()
 ### 5. Diagrammes visuels
 Inclure un diagramme UML ou Merise pour représenter les relations entre les entités. Voici une description textuelle pour guider la création du diagramme :
 
-- **Utilisateur/Admin** : Lié à **Commande** via `id_utilisateur`.
-- **Commande** : Liée à **Ligne de commande** via `id_commande`.
-- **Produits** : Lié à **Ligne de commande** via `id_produit`.
-- **Produits** : Lié à **Fournisseurs** via `id_fournisseur`.
-- **Produits** : Lié à **Catégorie/Sous-catégorie** via `id_categorie` et `id_sous_categorie`.
+@startuml
+' Définition des entités et de leurs relations
+
+class Utilisateur {
+    +id_utilisateur : INT
+    +nom : VARCHAR(100)
+    +prenom : VARCHAR(100)
+    +email : VARCHAR(255)
+    +mot_de_passe : VARCHAR(255)
+    +role : ENUM("admin", "client")
+    +coefficient : DECIMAL(5,2)
+    +id_commercial : INT
+    +date_creation : DATETIME
+    +type_client : ENUM("particulier", "pro")
+}
+
+class Commande {
+    +id_commande : INT
+    +id_utilisateur : INT
+    +date_commande : DATETIME
+    +statut : ENUM("en cours", "expédiée", "livrée")
+    +total_ht : DECIMAL(10,2)
+    +reduction : DECIMAL(5,2)
+    +adresse_livraison : TEXT
+    +adresse_facturation : TEXT
+    +mode_paiement : ENUM("carte", "virement")
+    +reglement : ENUM("payé", "en attente")
+}
+
+class LigneCommande {
+    +id_ligne_commande : INT
+    +id_commande : INT
+    +id_produit : INT
+    +quantite_commande : INT
+    +quantite_livree : INT
+    +prix_unitaire : DECIMAL(10,2)
+}
+
+class Produit {
+    +id_produit : INT
+    +nom_produit : VARCHAR(100)
+    +description_courte : VARCHAR(255)
+    +description_longue : TEXT
+    +reference_fournisseur : VARCHAR(100)
+    +prix_achat : DECIMAL(10,2)
+    +prix_vente : DECIMAL(10,2)
+    +photo : VARCHAR(255)
+    +stock : INT
+    +id_categorie : INT
+    +id_sous_categorie : INT
+    +id_fournisseur : INT
+    +statut_publication : ENUM("actif", "désactivé")
+}
+
+class Fournisseur {
+    +id_fournisseur : INT
+    +nom_fournisseur : VARCHAR(100)
+    +contact : TEXT
+}
+
+class Categorie {
+    +id_categorie : INT
+    +nom_categorie : VARCHAR(100)
+    +id_categorie_parent : INT
+}
+
+class SousCategorie {
+    +id_sous_categorie : INT
+    +nom_sous_categorie : VARCHAR(100)
+    +id_categorie_parent : INT
+}
+
+' Relations entre les entités
+Utilisateur "1" --> "0..*" Commande : id_utilisateur
+Commande "1" --> "1..*" LigneCommande : id_commande
+LigneCommande "1" --> "1" Produit : id_produit
+Produit "1" --> "1" Fournisseur : id_fournisseur
+Produit "1" --> "1" Categorie : id_categorie
+Produit "1" --> "1" SousCategorie : id_sous_categorie
+@enduml
 
 ### 6. Gestion des erreurs
 Dans les exemples PHP, ajouter des logs ou des messages d'erreur détaillés pour faciliter le débogage. Exemple :
